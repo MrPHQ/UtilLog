@@ -13,4 +13,7 @@
 #define UTIL_SM_CTRL_FLAG_EVENT "_EVENT"
 #define UTIL_SM_CTRL_FLAG_MUTEX "_MUTEX"
 
+/**< 日志文件目录 */
+#define LOG_FOLDER_NAME "log"
+
 #endif

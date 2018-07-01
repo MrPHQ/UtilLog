@@ -37,7 +37,7 @@ namespace UTIL_LOG
 		\param nHead
 			日志文件记录头信息. 参见LOG_HEAD
 		\param file
-			日志文件路径.完整路径.
+			日志文件(文件名).
 		\param uiDays
 			存储天数
 		\param uiPerFileSize

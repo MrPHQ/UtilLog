@@ -19,7 +19,11 @@
 
 #include <utils\utils.h>
 #include <utils\ShareMemory.h>
+#include <utils\LogFile.h>
+#include <utils\Thread.h>
 using namespace UTILS::API;
 #pragma comment(lib, "utils/utils.lib")
 
 #include "InnerDef.h"
+
+extern HINSTANCE ghIns;
