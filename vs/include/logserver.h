@@ -34,8 +34,9 @@ namespace UTIL_LOG
 	private:
 		/**< .*/
 		BOOL m_bInit;
-		/**< .*/
+		/**< 共享内存.日志内容.*/
 		UTILS::CShareMemory m_smLog;
+		/**< 共享内存.控制命令.*/
 		UTILS::CShareMemory m_smControl;
 		/**< 写日志线程 .*/
 		UTILS::CThreadBox m_tbThread;

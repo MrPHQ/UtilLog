@@ -52,8 +52,8 @@ namespace UTIL_LOG
 		*/
 		void Close();
 		/**
-		\brief
-			写入日志.
+		\brief 写入日志.
+			注意最大字符串长度 [1024*256]
 		*/
 		void Write(const char* pFormat, ...);
 		/**
@@ -65,6 +65,20 @@ namespace UTIL_LOG
 			日志所在位置文件行号.
 		*/
 		void WriteEx(const char* file, int line, const char* pFormat, ...);
+
+	private:
+		int WriteCmdData(void* pData, int len);
+	private:
+		/**< .*/
+		BOOL m_bOpen;
+		/**< 共享内存 日志内容. */
+		UTILS::CShareMemory m_smLog;
+		/**< 共享内存 控制命令. */
+		UTILS::CShareMemory m_smControl;
+		/**< 文件名. */
+		std::string m_strFile;
+		/**< 写日志线程 .*/
+		UTILS::CThreadBox m_tbThread;
 	};
 }
 

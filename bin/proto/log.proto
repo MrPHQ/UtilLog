@@ -36,6 +36,8 @@ message MsgLogControl {
     uint32 CmdFlag = 2;
 	// 时间戳
     uint32 Timestamp = 3;
+	// 数据长度
+    uint32 DataLen = 4;
 	// 命令数据
-	bytes Data =4;
+	bytes Data =5;
 }

@@ -14,8 +14,6 @@
 
 
 // TODO: reference additional headers your program requires here
-#include "../include/UtilLog.h"
-#include "../include/logger.h"
 
 #include <utils\utils.h>
 #include <utils\ShareMemory.h>
@@ -23,6 +21,9 @@
 #include <utils\Thread.h>
 using namespace UTILS::API;
 #pragma comment(lib, "utils/utils.lib")
+
+#include "../include/UtilLog.h"
+#include "../include/logger.h"
 
 #include "InnerDef.h"
 

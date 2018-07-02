@@ -85,6 +85,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_ATTRIBUTE_SECTION
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgLogControl, cmd_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgLogControl, cmdflag_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgLogControl, timestamp_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgLogControl, datalen_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MsgLogControl, data_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -144,14 +145,15 @@ void AddDescriptorsImpl() {
       "\n\tlog.proto\022\010UTIL_LOG\"G\n\nMsgLogFile\022\020\n\010H"
       "eadMode\030\001 \001(\r\022\014\n\004File\030\002 \001(\t\022\013\n\003Day\030\003 \001(\r"
       "\022\014\n\004Size\030\004 \001(\r\".\n\rMsgLogContent\022\014\n\004File\030"
-      "\001 \001(\t\022\017\n\007Content\030\002 \001(\t\"\243\001\n\rMsgLogControl"
+      "\001 \001(\t\022\017\n\007Content\030\002 \001(\t\"\264\001\n\rMsgLogControl"
       "\022,\n\003Cmd\030\001 \001(\0162\037.UTIL_LOG.MsgLogControl.C"
       "mdType\022\017\n\007CmdFlag\030\002 \001(\r\022\021\n\tTimestamp\030\003 \001"
-      "(\r\022\014\n\004Data\030\004 \001(\014\"2\n\007CmdType\022\021\n\rCMD_TYPE_"
-      "NONE\020\000\022\024\n\020CMD_TYPE_NEW_LOG\020\001b\006proto3"
+      "(\r\022\017\n\007DataLen\030\004 \001(\r\022\014\n\004Data\030\005 \001(\014\"2\n\007Cmd"
+      "Type\022\021\n\rCMD_TYPE_NONE\020\000\022\024\n\020CMD_TYPE_NEW_"
+      "LOG\020\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 316);
+      descriptor, 333);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "log.proto", &protobuf_RegisterTypes);
 }
@@ -1089,6 +1091,7 @@ void MsgLogContent::set_allocated_content(::std::string* content) {
 const int MsgLogControl::kCmdFieldNumber;
 const int MsgLogControl::kCmdFlagFieldNumber;
 const int MsgLogControl::kTimestampFieldNumber;
+const int MsgLogControl::kDataLenFieldNumber;
 const int MsgLogControl::kDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1110,16 +1113,16 @@ MsgLogControl::MsgLogControl(const MsgLogControl& from)
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
   ::memcpy(&cmd_, &from.cmd_,
-    static_cast<size_t>(reinterpret_cast<char*>(&timestamp_) -
-    reinterpret_cast<char*>(&cmd_)) + sizeof(timestamp_));
+    static_cast<size_t>(reinterpret_cast<char*>(&datalen_) -
+    reinterpret_cast<char*>(&cmd_)) + sizeof(datalen_));
   // @@protoc_insertion_point(copy_constructor:UTIL_LOG.MsgLogControl)
 }
 
 void MsgLogControl::SharedCtor() {
   data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&cmd_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&timestamp_) -
-      reinterpret_cast<char*>(&cmd_)) + sizeof(timestamp_));
+      reinterpret_cast<char*>(&datalen_) -
+      reinterpret_cast<char*>(&cmd_)) + sizeof(datalen_));
   _cached_size_ = 0;
 }
 
@@ -1163,8 +1166,8 @@ void MsgLogControl::Clear() {
 
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&cmd_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&timestamp_) -
-      reinterpret_cast<char*>(&cmd_)) + sizeof(timestamp_));
+      reinterpret_cast<char*>(&datalen_) -
+      reinterpret_cast<char*>(&cmd_)) + sizeof(datalen_));
   _internal_metadata_.Clear();
 }
 
@@ -1221,10 +1224,24 @@ bool MsgLogControl::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes Data = 4;
+      // uint32 DataLen = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &datalen_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes Data = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_data()));
         } else {
@@ -1275,10 +1292,15 @@ void MsgLogControl::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->timestamp(), output);
   }
 
-  // bytes Data = 4;
+  // uint32 DataLen = 4;
+  if (this->datalen() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->datalen(), output);
+  }
+
+  // bytes Data = 5;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      4, this->data(), output);
+      5, this->data(), output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1311,11 +1333,16 @@ void MsgLogControl::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->timestamp(), target);
   }
 
-  // bytes Data = 4;
+  // uint32 DataLen = 4;
+  if (this->datalen() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->datalen(), target);
+  }
+
+  // bytes Data = 5;
   if (this->data().size() > 0) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        4, this->data(), target);
+        5, this->data(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1335,7 +1362,7 @@ size_t MsgLogControl::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // bytes Data = 4;
+  // bytes Data = 5;
   if (this->data().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
@@ -1360,6 +1387,13 @@ size_t MsgLogControl::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->timestamp());
+  }
+
+  // uint32 DataLen = 4;
+  if (this->datalen() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->datalen());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1404,6 +1438,9 @@ void MsgLogControl::MergeFrom(const MsgLogControl& from) {
   if (from.timestamp() != 0) {
     set_timestamp(from.timestamp());
   }
+  if (from.datalen() != 0) {
+    set_datalen(from.datalen());
+  }
 }
 
 void MsgLogControl::CopyFrom(const ::google::protobuf::Message& from) {
@@ -1434,6 +1471,7 @@ void MsgLogControl::InternalSwap(MsgLogControl* other) {
   swap(cmd_, other->cmd_);
   swap(cmdflag_, other->cmdflag_);
   swap(timestamp_, other->timestamp_);
+  swap(datalen_, other->datalen_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -1488,7 +1526,21 @@ void MsgLogControl::set_timestamp(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:UTIL_LOG.MsgLogControl.Timestamp)
 }
 
-// bytes Data = 4;
+// uint32 DataLen = 4;
+void MsgLogControl::clear_datalen() {
+  datalen_ = 0u;
+}
+::google::protobuf::uint32 MsgLogControl::datalen() const {
+  // @@protoc_insertion_point(field_get:UTIL_LOG.MsgLogControl.DataLen)
+  return datalen_;
+}
+void MsgLogControl::set_datalen(::google::protobuf::uint32 value) {
+  
+  datalen_ = value;
+  // @@protoc_insertion_point(field_set:UTIL_LOG.MsgLogControl.DataLen)
+}
+
+// bytes Data = 5;
 void MsgLogControl::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

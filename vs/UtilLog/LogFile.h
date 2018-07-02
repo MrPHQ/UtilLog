@@ -1,5 +1,6 @@
 #pragma once
 
+class CLogFile;
 class CLogFileMgr
 {
 private:

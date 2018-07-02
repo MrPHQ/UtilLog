@@ -89,20 +89,6 @@ namespace UTIL_LOG
 			}
 
 		});
-
-		DWORD dwLogHeadFlag = 0;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_TIME;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_PROC_NAME;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_PROC_ID;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_THREAD_ID;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_FILE_NAME;
-		dwLogHeadFlag |= UTILS::LOG_FILE_HEAD_FILE_LINE;
-		char szFile[256];
-		int iCnt = 0;
-		_snprintf_s(szFile, _TRUNCATE, "%s\\utilsTest.log", UTILS::API::GetCurrentPath());
-		UTILS::LOG_INIT(UTILS::LOG_FILE_MODE_ASYNC_IN, dwLogHeadFlag, szFile, 2, 1024 * 1024);
-		UTILS::LOG_WRITE_EX("Æô¶¯.");
-
 		return 0;
 	}
 
@@ -121,12 +107,19 @@ namespace UTIL_LOG
 		if (nullptr == pData){
 			return;
 		}
+		MsgLogControl ctrlCmd;
 		MsgLogFile file;
-		if (!file.ParseFromArray(pData->bData, pData->iLen)){
+		if (!ctrlCmd.ParseFromArray(pData->bData, pData->iLen)){
 			MSG_INFO("error, line:%d", __LINE__);
 			return;
 		}
-		CLogFileMgr::GetInstance().Open(file.headmode(),file.file().data(),file.day(), file.size());
+		if (ctrlCmd.cmd() == MsgLogControl::CMD_TYPE_NEW_LOG){
+			if (!file.ParseFromArray(ctrlCmd.data().data(), ctrlCmd.data().length())){
+				MSG_INFO("error, line:%d", __LINE__);
+				return;
+			}
+			CLogFileMgr::GetInstance().Open(file.headmode(), file.file().data(), file.day(), file.size());
+		}
 	}
 
 	void CLogServer::ProcPicContentData(UTILS::CommunicatorPacket_t* pData)

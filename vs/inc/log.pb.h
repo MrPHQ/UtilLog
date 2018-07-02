@@ -436,9 +436,9 @@ class MsgLogControl : public ::google::protobuf::Message /* @@protoc_insertion_p
 
   // accessors -------------------------------------------------------
 
-  // bytes Data = 4;
+  // bytes Data = 5;
   void clear_data();
-  static const int kDataFieldNumber = 4;
+  static const int kDataFieldNumber = 5;
   const ::std::string& data() const;
   void set_data(const ::std::string& value);
   #if LANG_CXX11
@@ -468,6 +468,12 @@ class MsgLogControl : public ::google::protobuf::Message /* @@protoc_insertion_p
   ::google::protobuf::uint32 timestamp() const;
   void set_timestamp(::google::protobuf::uint32 value);
 
+  // uint32 DataLen = 4;
+  void clear_datalen();
+  static const int kDataLenFieldNumber = 4;
+  ::google::protobuf::uint32 datalen() const;
+  void set_datalen(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:UTIL_LOG.MsgLogControl)
  private:
 
@@ -476,6 +482,7 @@ class MsgLogControl : public ::google::protobuf::Message /* @@protoc_insertion_p
   int cmd_;
   ::google::protobuf::uint32 cmdflag_;
   ::google::protobuf::uint32 timestamp_;
+  ::google::protobuf::uint32 datalen_;
   mutable int _cached_size_;
   friend struct protobuf_log_2eproto::TableStruct;
 };
@@ -742,7 +749,21 @@ inline void MsgLogControl::set_timestamp(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:UTIL_LOG.MsgLogControl.Timestamp)
 }
 
-// bytes Data = 4;
+// uint32 DataLen = 4;
+inline void MsgLogControl::clear_datalen() {
+  datalen_ = 0u;
+}
+inline ::google::protobuf::uint32 MsgLogControl::datalen() const {
+  // @@protoc_insertion_point(field_get:UTIL_LOG.MsgLogControl.DataLen)
+  return datalen_;
+}
+inline void MsgLogControl::set_datalen(::google::protobuf::uint32 value) {
+  
+  datalen_ = value;
+  // @@protoc_insertion_point(field_set:UTIL_LOG.MsgLogControl.DataLen)
+}
+
+// bytes Data = 5;
 inline void MsgLogControl::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
