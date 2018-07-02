@@ -23,15 +23,22 @@ namespace UTIL_LOG
 
 	private:
 		/*
-		@brief 读取日志.
+		@brief 从共享回车中读取日志.
 		*/
-		void ProcPicData(UTILS::CommunicatorPacket_t*);
+		void ProcPicCmdData(UTILS::CommunicatorPacket_t*);
+		void ProcPicContentData(UTILS::CommunicatorPacket_t*);
+		/*
+		@brief 写日志.
+		*/
+		void ThreadData(BYTE* pData, int len);
 	private:
 		/**< .*/
 		BOOL m_bInit;
 		/**< .*/
 		UTILS::CShareMemory m_smLog;
 		UTILS::CShareMemory m_smControl;
+		/**< 写日志线程 .*/
+		UTILS::CThreadBox m_tbThread;
 	};
 }
 

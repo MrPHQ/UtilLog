@@ -16,6 +16,9 @@
     <Filter Include="include">
       <UniqueIdentifier>{6de70e54-0c47-42ed-a9a1-f9424816bdb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc">
+      <UniqueIdentifier>{bde758a0-5c80-43cb-9280-3d2915388841}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -42,6 +45,9 @@
     <ClInclude Include="LogFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\log.pb.h">
+      <Filter>inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="LogFile.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\inc\log.pb.cc">
+      <Filter>inc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

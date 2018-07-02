@@ -1,0 +1,41 @@
+syntax="proto3";
+package UTIL_LOG;
+
+	
+// 日志文件描述
+message MsgLogFile {
+	// 日志头信息
+    uint32 HeadMode = 1;
+	// 日志文件名,不包括路径
+    string File = 2;
+	// 存储天数 >0 有效,=0不判断天数
+    uint32 Day = 3;
+	// 单个文件大小 >0 有效,=0不判断
+	uint32 Size = 4;
+}
+
+// 日志文件内容
+message MsgLogContent {
+	// 日志文件名,不包括路径
+    string File = 1;
+	// 日志内容
+	string Content = 2;
+}
+
+// 日志控制命令
+message MsgLogControl {
+	enum CmdType {
+		// 
+		CMD_TYPE_NONE = 0;
+		// 打开新的日志文件
+		CMD_TYPE_NEW_LOG = 1;
+	}
+	// 命令类型
+    CmdType Cmd = 1;
+	// 命令标识
+    uint32 CmdFlag = 2;
+	// 时间戳
+    uint32 Timestamp = 3;
+	// 命令数据
+	bytes Data =4;
+}

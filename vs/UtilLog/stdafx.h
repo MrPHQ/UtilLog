@@ -27,3 +27,9 @@ using namespace UTILS::API;
 #include "InnerDef.h"
 
 extern HINSTANCE ghIns;
+
+#ifndef NOT_MSG
+#define MSG_INFO(...) UTILS::API::DEBUG_INFO("UtilLog", __VA_ARGS__);
+#else
+#define MSG_INFO(...)
+#endif
