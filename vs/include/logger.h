@@ -66,6 +66,12 @@ namespace UTIL_LOG
 		*/
 		void WriteEx(const char* file, int line, const char* pFormat, ...);
 
+	public:
+		static inline CLogger& getSingleton()
+		{
+			static CLogger _instance;
+			return _instance;
+		}
 	private:
 		int WriteCmdData(void* pData, int len);
 	private:
@@ -80,6 +86,12 @@ namespace UTIL_LOG
 		/**< 写日志线程 .*/
 		UTILS::CThreadBox m_tbThread;
 	};
+#define ULF_LOGGER CLogger::getSingleton()
+
+#define LOG_OPEN(P1,P2,P3,P4) ULF_LOGGER.Open(P1,P2,P3,P4);
+#define LOG_CLOSE() ULF_LOGGER.Close();
+#define LOG(...) ULF_LOGGER.Write(__VA_ARGS__);
+#define LOGEX(...) ULF_LOGGER.WriteEx(__FILE__, __LINE__, __VA_ARGS__);
 }
 
 #endif

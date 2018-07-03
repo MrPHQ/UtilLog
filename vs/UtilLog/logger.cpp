@@ -43,10 +43,11 @@ namespace UTIL_LOG
 			MSG_INFO("error, line:%d", __LINE__);
 			return -3;
 		}
-
+		char szFile[256];
+		UTILS::API::GBKToUtf8(szFile, 256, file, strlen(file)+1);
 		MsgLogFile logFile;
 		logFile.set_headmode(nHead);
-		logFile.set_file(file);
+		logFile.set_file(szFile);
 		logFile.set_day(uiDays);
 		logFile.set_size(uiPerFileSize);
 
@@ -66,15 +67,17 @@ namespace UTIL_LOG
 			MSG_INFO("error, line:%d", __LINE__);
 			return -5;
 		}
-		m_strFile = file;
+		m_strFile = szFile;
 		iDataLen = logCtrl.ByteSizeLong();
 		WriteCmdData(buff, iDataLen);
 
 		m_tbThread.Init(1024, 1024, TRUE, TRUE);
 		m_tbThread.Start([this](BOOL& bRun, HANDLE hWait, void* context){
-			BYTE buff[1024 * 512], byData[1024 * 512];
-			int iBuffLen = 1024 * 512, iDataLen = 0;
+			BYTE buff[1024 * 256], byData[1024 * 256];
+			int iBuffLen = 1024 * 256, iDataLen = 0, iTmp =0;
 			UTILS::CommunicatorPacket_t* pInfo;
+			MsgLogContent logContent;
+
 			while (bRun)
 			{
 				WaitForSingleObject(hWait, 100);
@@ -82,23 +85,31 @@ namespace UTIL_LOG
 					break;
 				}
 
-				MsgLogContent logContent;
 				do
 				{
 					iDataLen = m_tbThread.ReadData(buff, iBuffLen);
 					if (iDataLen <= 0){
 						break;
 					}
+
 					logContent.Clear();
 					logContent.set_file(m_strFile.data());
-					logContent.set_content((const char*)buff, iDataLen);
+					buff[iDataLen] = '\0';
+
+					iTmp = UTILS::API::GBKToUtf8((char*)byData, 1024 * 256, (const char*)buff, iDataLen+1);
+					if (iTmp <= 0){
+						MSG_INFO("error, line:%d", __LINE__);
+						continue;
+					}
+					logContent.set_content((const char*)byData, iTmp-1);
 					iDataLen = logContent.ByteSizeLong();
-					if (logContent.SerializeToArray(byData, 1024 * 512)){
+
+					if (logContent.SerializeToArray(byData, 1024 * 256)){
 						pInfo = (UTILS::CommunicatorPacket_t*)buff;
 						ZeroMemory(pInfo, sizeof(UTILS::CommunicatorPacket_t));
 						pInfo->dwFlag = PROC_FLAG;
 						pInfo->iLen = iDataLen;
-						memcpy(pInfo->bData, buff, min(iDataLen, 1024 * 512 - sizeof(UTILS::CommunicatorPacket_t)));
+						memcpy(pInfo->bData, byData, min(iDataLen, 1024 * 256 - sizeof(UTILS::CommunicatorPacket_t)));
 						m_smLog.WriteData(pInfo);
 					}
 					else{
@@ -134,15 +145,33 @@ namespace UTIL_LOG
 		va_start(args, pFormat);
 		_vsnprintf_s(buff, 1024 * 256 - sizeof(UTILS::CommunicatorPacket_t) - 1, pFormat, args);
 		va_end(args);
+		OutputDebugString(buff);
 		m_tbThread.WriteData(buff, strlen(buff));
 	}
 
 	void CLogger::WriteEx(const char* file, int line, const char* pFormat, ...)
 	{
-		if (nullptr == file || nullptr == pFormat){
+		if (nullptr == pFormat){
 			return;
 		}
+		char buff[1024 * 256], buff2[1024 * 256];
+		char szTmp[256];
+		va_list args;
+		va_start(args, pFormat);
+		_vsnprintf_s(buff, 1024 * 256 - sizeof(UTILS::CommunicatorPacket_t) - 1, pFormat, args);
+		va_end(args);
 
+		buff2[0] = '\0';
+		if (nullptr != file){
+			_snprintf_s(szTmp, _TRUNCATE, "[FILE:%s]", file);
+			strncat_s(buff2, 1024 * 256, szTmp, min(strlen(szTmp), 1024 * 256 - 1 - strlen(buff2)));
+		}
+		if (line > 0){
+			_snprintf_s(szTmp, _TRUNCATE, "[LINE:%s]", line);
+			strncat_s(buff2, 1024 * 256, szTmp, min(strlen(szTmp), 1024 * 256 - 1 - strlen(buff2)));
+		}
+		strncat_s(buff2, 1024 * 256, buff, min(strlen(buff), 1024 * 256 - 1 - strlen(buff2)));
+		m_tbThread.WriteData(buff2, strlen(buff2));
 	}
 
 	int CLogger::WriteCmdData(void* pData, int len)

@@ -84,7 +84,7 @@ namespace UTIL_LOG
 					if (iDataLen <= 0){
 						break;
 					}
-					ThreadData(pBuff, iBuffLen);
+					ThreadData(pBuff, iDataLen);
 				} while (true);
 			}
 
@@ -118,7 +118,8 @@ namespace UTIL_LOG
 				MSG_INFO("error, line:%d", __LINE__);
 				return;
 			}
-			CLogFileMgr::GetInstance().Open(file.headmode(), file.file().data(), file.day(), file.size());
+			int ret = CLogFileMgr::GetInstance().Open(file.headmode(), file.file().data(), file.day(), file.size());
+			MSG_INFO("打开日志文件[%s] err:%d", file.file().data(),ret);
 		}
 	}
 
@@ -127,6 +128,7 @@ namespace UTIL_LOG
 		if (nullptr == pData){
 			return;
 		}
+
 		m_tbThread.WriteData(pData->bData, pData->iLen);
 	}
 
@@ -140,6 +142,13 @@ namespace UTIL_LOG
 			MSG_INFO("error, line:%d",__LINE__);
 			return;
 		}
-		CLogFileMgr::GetInstance().Write(log.file().data(), log.content().data());
+#if 1
+		BYTE byData[1024 * 256];
+		int iTmp = UTILS::API::Utf8ToGBK((char*)byData, 1024 * 256, log.content().data(), log.content().length()+1);
+		if (iTmp <= 0){
+			MSG_INFO("error, line:%d", __LINE__);
+		}
+#endif
+		CLogFileMgr::GetInstance().Write(log.file().data(), (const char*)byData/*log.content().data()*/);
 	}
 }

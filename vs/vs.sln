@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilLog", "UtilLog\UtilLog.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilLogService", "UtilLogService\UtilLogService.vcxproj", "{4FF4AD77-6E75-470A-AFE9-987E1C243D2D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Demo\Demo.vcxproj", "{1F8A82E3-A894-48FC-9C6C-35747D3FA3A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{4FF4AD77-6E75-470A-AFE9-987E1C243D2D}.Debug|Win32.Build.0 = Debug|Win32
 		{4FF4AD77-6E75-470A-AFE9-987E1C243D2D}.Release|Win32.ActiveCfg = Release|Win32
 		{4FF4AD77-6E75-470A-AFE9-987E1C243D2D}.Release|Win32.Build.0 = Release|Win32
+		{1F8A82E3-A894-48FC-9C6C-35747D3FA3A8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1F8A82E3-A894-48FC-9C6C-35747D3FA3A8}.Debug|Win32.Build.0 = Debug|Win32
+		{1F8A82E3-A894-48FC-9C6C-35747D3FA3A8}.Release|Win32.ActiveCfg = Release|Win32
+		{1F8A82E3-A894-48FC-9C6C-35747D3FA3A8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
